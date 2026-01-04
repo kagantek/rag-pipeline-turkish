@@ -1,0 +1,16 @@
+streamlit
+pdfplumber
+langchain
+langchain-core
+langchain-text-splitters
+langchain-qdrant
+sentence-transformers
+torch
+torchvision
+torchaudio
+qdrant-client
+flashrank
+groq
+python-dotenv
+tqdm
+numpy
