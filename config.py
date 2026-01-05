@@ -31,7 +31,7 @@ TOP_K_RERANKED = 5  # Reranking sonrası en iyi 5 parçayı seçecek
 # Qdrant ayarları
 QDRANT_PATH = "./qdrant_db"  # Qdrant veri yolu
 COLLECTION_NAME = "documents_tr"  # 
-USE_MEMORY_MODE = True
+USE_MEMORY_MODE = False
 
 # API Key
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
