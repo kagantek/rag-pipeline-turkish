@@ -4,6 +4,7 @@ from typing import List, Dict, Any, Tuple
 import streamlit as st
 import pdfplumber
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+import hmac
 
 from config import (
     CHUNK_SIZE,
@@ -37,8 +38,32 @@ def init_session_state():
     if "embedder_loaded" not in st.session_state:
         st.session_state.embedder_loaded = False
     if "sources" not in st.session_state:
-        st.session_state.sources = []
+        st.session_state.sources = []  
 
+def check_password():
+    """Returns `True` if the user had a correct password."""
+
+    def password_entered():
+        if hmac.compare_digest(st.session_state["password"], st.secrets["auth"]["password"]):
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]
+        else:
+            st.session_state["password_correct"] = False
+
+    if st.session_state.get("password_correct", False):
+        return True
+
+    st.text_input(
+        "Lütfen Erişim Şifresini Giriniz", 
+        type="password", 
+        on_change=password_entered, 
+        key="password"
+    )
+
+    if "password_correct" in st.session_state and not st.session_state["password_correct"]:
+        st.error("😕 Hatalı Şifre")
+    
+    return False
 
 init_session_state()
 
@@ -334,7 +359,10 @@ def generate_response(query: str) -> Tuple[str, List[Dict], Dict]:
 
 
 def main():
-    """Main application entry point."""
+    if not check_password():
+        st.stop()
+
+    st.write("Giriş Başarılı! Hoşgeldiniz.")
     render_sidebar()
     render_chat()
 
