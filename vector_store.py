@@ -26,10 +26,10 @@ class VectorStore:
         self.path = path
         
         if use_memory:
-            print("Qdrant başlatılıyor: Bellek modu (geçici)")
+            print("Initializing Qdrant: Memory mode (temporary)")
             self._client = QdrantClient(":memory:")
         else:
-            print(f"Qdrant başlatılıyor: Disk modu ({path})")
+            print(f"Initializing Qdrant: Disk mode ({path})")
             self._client = QdrantClient(path=path)
         
         self._ensure_collection_exists()
@@ -42,7 +42,7 @@ class VectorStore:
             embedding=self._embedder
         )
         
-        print(f"Koleksiyon hazır: {collection_name}")
+        print(f"Collection ready: {collection_name}")
     
     def _ensure_collection_exists(self):
         try:
@@ -50,7 +50,7 @@ class VectorStore:
             collection_names = [c.name for c in collections]
             
             if self.collection_name not in collection_names:
-                print(f"Yeni koleksiyon oluşturuluyor: {self.collection_name}")
+                print(f"Creating new collection: {self.collection_name}")
                 self._client.create_collection(
                     collection_name=self.collection_name,
                     vectors_config=VectorParams(
@@ -78,10 +78,10 @@ class VectorStore:
         
         try:
             ids = self._vector_store.add_documents(documents)
-            print(f"{len(documents)} döküman eklendi")
+            print(f"{len(documents)} documents added")
             return ids
         except Exception as e:
-            print(f"Döküman ekleme hatası: {e}")
+            print(f"Document add error: {e}")
             raise
     
     def search(
@@ -101,7 +101,7 @@ class VectorStore:
                     "id": doc.metadata.get("_id", ""),
                     "score": score,
                     "text": doc.page_content,
-                    "source": doc.metadata.get("source", "Bilinmeyen"),
+                    "source": doc.metadata.get("source", "Unknown"),
                     "chunk_index": doc.metadata.get("chunk_index", -1),
                     "page_number": doc.metadata.get("page_number", -1),
                     "metadata": doc.metadata
@@ -109,7 +109,7 @@ class VectorStore:
             
             return formatted_results
         except Exception as e:
-            print(f"Arama hatası: {e}")
+            print(f"Search error: {e}")
             return []
     
     def get_collection_stats(self) -> Dict[str, Any]:
@@ -122,7 +122,7 @@ class VectorStore:
                 "status": info.status
             }
         except Exception as e:
-            print(f"İstatistik alma hatası: {e}")
+            print(f"Stats retrieval error: {e}")
             return {
                 "name": self.collection_name,
                 "vectors_count": 0,
@@ -132,7 +132,7 @@ class VectorStore:
     
     def clear_collection(self):
         try:
-            print(f"Koleksiyon siliniyor: {self.collection_name}")
+            print(f"Deleting collection: {self.collection_name}")
             self._client.delete_collection(self.collection_name)
             self._ensure_collection_exists()
             
@@ -141,9 +141,9 @@ class VectorStore:
                 collection_name=self.collection_name,
                 embedding=self._embedder
             )
-            print("Koleksiyon sıfırlandı")
+            print("Collection reset")
         except Exception as e:
-            print(f"Koleksiyon silme hatası: {e}")
+            print(f"Collection delete error: {e}")
             raise
     
     def collection_exists(self) -> bool:

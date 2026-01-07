@@ -12,19 +12,19 @@ from config import (
 class LLMGenerator:
     def __init__(self, api_key: str = GROQ_API_KEY):
         if not api_key:
-            raise ValueError("GROQ_API_KEY gerekli. Lütfen .env dosyasını kontrol edin.")
+            raise ValueError("GROQ_API_KEY required. Please check your .env file.")
         
         self.client = Groq(api_key=api_key)
         self.available_models = LLM_MODELS
-        print("Groq LLM bağlantısı kuruldu")
+        print("Groq LLM connection established")
     
     def _format_chat_history(self, chat_history: List[Dict[str, str]]) -> str:
         if not chat_history:
-            return "Henüz konuşma geçmişi yok."
+            return "No conversation history yet."
         
         formatted_parts = []
         for msg in chat_history:
-            role = "Kullanıcı" if msg["role"] == "user" else "Asistan"
+            role = "User" if msg["role"] == "user" else "Assistant"
             content = msg["content"][:500]
             formatted_parts.append(f"{role}: {content}")
         
@@ -68,9 +68,9 @@ class LLMGenerator:
             return response.choices[0].message.content
             
         except Exception as e:
-            error_msg = f"LLM hatası: {str(e)}"
+            error_msg = f"LLM error: {str(e)}"
             print(f"{error_msg}")
-            return "Bağlantı hatası, lütfen tekrar deneyin."
+            return "Connection error, please try again."
     
     def generate_stream(
         self,
@@ -114,7 +114,7 @@ class LLMGenerator:
                     
         except Exception as e:
 
-            yield "Bağlantı hatası, lütfen tekrar deneyin."
+            yield "Connection error, please try again."
     
     @staticmethod
     def get_model_display_name(model_id: str) -> str:

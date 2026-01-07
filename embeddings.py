@@ -11,8 +11,8 @@ class TurkishEmbedder(Embeddings):
     def __init__(self, model_name: str = EMBEDDING_MODEL_NAME):
         self.model_name = model_name
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        print(f"Embedding modeli yükleniyor: {model_name}")
-        print(f"Cihaz: {self.device}")
+        print(f"Loading embedding model: {model_name}")
+        print(f"Device: {self.device}")
         
         self._model = None
     
@@ -20,7 +20,7 @@ class TurkishEmbedder(Embeddings):
     def model(self) -> SentenceTransformer:
         if self._model is None:
             self._model = SentenceTransformer(self.model_name, device=self.device)
-            print("Embedding modeli hazır!")
+            print("Embedding model ready!")
         return self._model
     
     def embed_documents(self, texts: List[str]) -> List[List[float]]:

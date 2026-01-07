@@ -14,3 +14,5 @@ groq
 python-dotenv
 tqdm
 numpy
+pytest
+pytest-cov

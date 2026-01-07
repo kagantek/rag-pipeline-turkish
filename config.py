@@ -7,37 +7,37 @@ load_dotenv()
 EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-small"
 EMBEDDING_DIMENSION = 384  # multilingual-e5-small output dimension
 
-# Reranking stratejisi için kullanılan model
+# Model used for reranking strategy
 RERANKER_MODEL_NAME = "ms-marco-MiniLM-L-12-v2"
 
-# LLM Modelleri
+# LLM Models
 LLM_MODELS = {
     "Llama 3.3 70B": "llama-3.3-70b-versatile",
     "Llama 3.1 8B": "llama-3.1-8b-instant"
 }
 
-# Direkt kullanılacak varsayılan model
+# Default model to use directly
 DEFAULT_LLM_MODEL = "llama-3.3-70b-versatile"
 
 
-# Dokümanlar ne kadar parçaya bölünecek ve ne kadar overlap olacak
+# Document chunk size and overlap settings
 CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 200  
 
-# Arama parametreleri
-TOP_K_INITIAL = 25  # İlk aşamada en alakalı 20 parçayı döndürecek
-TOP_K_RERANKED = 5  # Reranking sonrası en iyi 5 parçayı seçecek
+# Search parameters
+TOP_K_INITIAL = 25  # Return top 25 most relevant chunks in first stage
+TOP_K_RERANKED = 5  # Select top 5 chunks after reranking
 
-# Qdrant ayarları
-QDRANT_PATH = "./qdrant_db"  # Qdrant veri yolu
-COLLECTION_NAME = "documents_tr"  # 
+# Qdrant settings
+QDRANT_PATH = "./qdrant_db"  # Qdrant data path
+COLLECTION_NAME = "documents_tr"
 USE_MEMORY_MODE = False
 
 # API Key
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
 
-# Modelde kullanılacak prompt
+# Prompt to be used in the model
 SYSTEM_PROMPT_TR = """Sen deneyimli bir Kıdemli ERP Yazılım ve Finans Danışmanısın. Türk işletme finansmanı, ERP sistemleri, vergi mevzuatı ve muhasebe konularında uzmansın.
 
 MUTLAK KURALLAR:

@@ -13,17 +13,17 @@ class RetrievalEngine:
     def __init__(self):
         self.vector_store = get_vector_store()
         self._reranker = None
-        print("Retrieval Engine başlatıldı")
+        print("Retrieval Engine initialized")
     
     @property
     def reranker(self):
         if self._reranker is None:
-            print(f"FlashRank yükleniyor: {RERANKER_MODEL_NAME}")
+            print(f"Loading FlashRank: {RERANKER_MODEL_NAME}")
             try:
                 self._reranker = Ranker(model_name=RERANKER_MODEL_NAME, cache_dir="./flashrank_cache")
-                print("FlashRank hazır!")
+                print("FlashRank ready!")
             except Exception as e:
-                print(f"FlashRank yüklenemedi: {e}")
+                print(f"FlashRank could not be loaded: {e}")
                 raise
         return self._reranker
     
@@ -86,17 +86,17 @@ class RetrievalEngine:
             return final_results, debug_info
             
         except Exception as e:
-            print(f"Retrieval hatası: {e}")
+            print(f"Retrieval error: {e}")
             debug_info["error"] = str(e)
             return [], debug_info
     
     def build_context(self, results: List[Dict[str, Any]]) -> str:
         if not results:
-            return "Bağlam bulunamadı."
+            return "No context found."
         
         context_parts = []
         for i, r in enumerate(results, 1):
-            source = r.get("source", "Bilinmeyen Kaynak")
+            source = r.get("source", "Unknown Source")
             page = r.get("page_number", -1)
             text = r.get("text", "")
             
